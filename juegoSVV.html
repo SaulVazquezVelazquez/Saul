@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Juego No Te Cases</title>
+    <style>
+      body {
+        /* Rompe el flujo normal pasa poder hacer swipe hacia abajo. */
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        /* ocupa todo el espacio. */
+        width: 100%;
+        height: 100%;
+        /* Elimina márgenes. */
+        margin: 0;
+        /* Evita el scroll */
+        overflow: hidden;
+      }
+      
+
+      .grupo {
+        position: absolute;
+        display: block;
+        font-size: 30px;
+      }
+
+      .figura {
+        position: absolute;
+        display: block;
+        font-size: 60px;
+      }
+
+    </style>
+    <script>
+  	
+      function desvía(i) {
+        return i + 1 - 50 * Math.random();
+      }
+    	
+
+       
+      customElements.define("peligro-web", class extends HTMLElement {
+        connectedCallback() {
+          this.classList.add("grupo")
+          this.x = 0;
+          this.innerHTML = "&#X1F48D;";
+        }
+        
+        muévete() {
+          let y = 50 * Math.random(r) + 200;
+          let x = 12 * Math.random(y) + 20;
+          peligro.style.left = `${this.x}px`;
+          peligro.style.top = `${y}px`;
+          this.x = this.x > 1100 ? 5 : this.x + 50;
+          r += 1;
+        }  
+
+     });
+
+ customElements.define("caza-web", class extends HTMLElement {
+        connectedCallback() {
+          this.classList.add("grupo")
+          this.x = 0;
+          this.innerHTML = "&#X1F470;";
+        }
+
+        muévete() {
+          let y = 50 * Math.sin(r) + 200;
+          let x = 12 * Math.cos(y) + 20;
+          caza.style.left = `${this.x}px`;
+          caza.style.top = `${y}px`;
+          this.x = this.x > 1100 ? 5 : this.x + 50;
+          r += 1;   
+        }  
+     });
+
+
+      
+      customElements.define("figura-compas", class extends HTMLElement {
+        connectedCallback() {
+          this.classList.add("figura")
+          this.innerHTML = "&#X1F935;";
+          this.style.fontSize = "30px";
+        }
+        
+        muévete(x, y) {
+          this.style.right = `${desvía(x)}px`;
+          this.style.top = `${desvía(y)}px`;
+        }
+      });
+      customElements.define("figura-corre", class extends HTMLElement {
+        connectedCallback() {
+          this.classList.add("figura")
+          this.innerHTML += "&#X1F3C3;";
+          this.x = 0;
+          this.y = 0;
+        }
+        sube() {
+          this.y -= 20;
+          this.muévete()
+        }
+        baja() {
+          this.y += 20;
+          this.muévete()
+        }
+        izquierda() {
+          this.x -= 20;
+          this.muévete()
+        }
+        derecha() {
+          this.x += 20;
+          this.muévete()
+        }
+        muévete() {
+          //this.compas = Array.from(document.querySelectorAll("figura-compas","figura-beer"));
+          this.compas = Array.from(document.querySelectorAll("figura-compas"));
+          this.style.right = `${this.x}px`;
+          this.style.top = `${this.y}px`;
+          var incr = 100;
+          for (const compa of this.compas) {
+            compa.muévete(this.x + incr, this.y + incr);
+            incr += 100;
+          }
+        }
+      });
+
+      /*function encuentra(){
+       if (peligro.muévete() === corre.muévete()){
+    		alert("Encotrado");
+    	}
+    }
+*/
+
+	
+      
+
+      
+
+    </script>
+  </head>
+  <body>
+
+    <img src="fondo.gif" height="100%" width="100%" />
+    <peligro-web id="peligro"></peligro-web>
+    <figura-corre id="corre"></figura-corre>
+    <caza-web id="caza"></caza-web>
+    <figura-compas></figura-compas>
+    <figura-compas></figura-compas>
+    <footer>Copyright &copy;SVV Saul Vazquez Velazquez</footer>
+    <script>
+    	function meta(){
+       for(let a=20;a<200;a+=40){
+        let b=.5;
+        a = a+0;
+        document.body.innerHTML+=
+        `<div i style=";                                           
+         top:${a}px;
+        left:${b}px;">
+        &#x1F44C   
+        </div>`;
+      }
+  }
+
+      let r=2;
+
+      setInterval(() => peligro.muévete(), 400);
+      setInterval(() => caza.muévete(), 300);
+      meta();
+
+      corre.muévete();
+      document.addEventListener("keydown", evt => {
+        switch (evt.key) {
+          case "ArrowLeft":
+            corre.izquierda();
+            break;
+          case "ArrowRight":
+            corre.derecha();
+            break;
+          case "ArrowUp":
+            corre.sube();
+            break;
+          case "ArrowDown":
+            corre.baja();
+            break;
+        }
+      });
+      let iniciaX = null;
+      let iniciaY = null;
+      document.addEventListener('touchstart', evt => {
+        const toquInicial = evt.touches[0];
+        iniciaX = toquInicial.clientX;
+        iniciaY = toquInicial.clientY;
+      });
+      document.addEventListener('touchmove', evt => {
+        if (iniciaX && iniciaY) {
+          const mueve = evt.touches[0];
+          var mueveX = mueve.clientX;
+          var mueveY = mueve.clientY;
+          var difX = mueveX - iniciaX;
+          var difY = mueveY - iniciaY;
+          // Checa que el movimiento no sea muy corto,
+          if (Math.abs(difX) + Math.abs(difY) > 150) {
+            if (Math.abs(difX) > Math.abs(difY)) {
+              if (difX > 70) {
+                corre.derecha();
+              } else {
+                corre.izquierda();
+              }
+            } else if (difY > 70) {
+              corre.baja();
+            } else {
+              corre.sube();
+            }
+            // Reinicia valores.
+            iniciaX = null;
+            iniciaY = null;
+          }
+        }
+      });
+    </script>
+
+    <!--<audio src="fondo.mp3" autoplay loop></audio>-->
+  </body>
+</html>
