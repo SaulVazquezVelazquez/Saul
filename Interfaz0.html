@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <meta charset="utf-8">
+ <title>No te Cases</title>
+ <!--<script type="text/javascript" src="js/Controller.js"></script>-->
+</head>
+
+<body>
+	<h1>¿Que Comience el Juego?</h1>
+	
+	
+
+    <br>
+    <form id="2" action="javascript:regtwoper();">
+        			
+        <label>¿Registro para dos Personas?</label>
+        <p></p><label>Nombre Persona 1</label>
+            <input id="nombrej" type="text">
+        <p></p><label>Apellido Persona 1</label>
+            <input id="apellido" type="text" >
+        <p></p><label>Nombre Persona 2</label>
+            <input id="nombrej" type="text">
+        <p></p><label>Apellido Persona 2</label>
+            <input id="apellido" type="text" >
+            
+            <button type="submit">Procesa</button>
+    
+</form>
+       <br>     
+
+    
+<br>
+<button><a href="juegoSVV.html">Ir Al Juego</a> </button>
+
+	<script>
+
+        // Asociacion a Uno
+class Persona {
+    constructor(nombrej,apellido) {
+      this.nombrej = nombrej;
+      this.apellido = apellido;
+      this.personas = [nombrej,apellido]; //Asociacion a Muchos
+
+    }
+
+    
+    presentacion1p() {  
+        console.log(`Hola. Soy ${this.nombrej}. Y mi Apellido es ${this.apellido}`);
+      }
+      presentacion2p() {
+        console.log(`Hola. Las Personas Registrados son :  ${this.personas}.`);
+      }
+      /** @abstract */
+    error() { throw new Error("abstract"); }
+  }     
+  let per1 = new Persona("Pablo","Carmona");
+ 
+    class Jugador extends Persona {
+    constructor(nombrej,apellido,gamerid) {
+        super(nombrej,apellido);
+        this.gamerid = gamerid;
+        
+    }
+
+    generaid(nombrej,apellido,gamerid){
+        let alea =  Math.floor(Math.random()*(50-gamerid))+gamerid;
+        let id = nombrej[1] + apellido[4] + alea;
+        console.log("El gamer id es " + id);
+    }
+
+    presentacionj() { console.log("----Bienvenidos----- "); }
+  
+    
+}
+
+function regtwoper(){
+let per2 = new Persona(nombrej.value,apellido.value,3);
+per2.personas = [];
+// Mostrar 2 jugadores con presentacion
+let arr = [per2];
+for(let cont of arr){
+    console.log(arr);
+console.log(per2.presentacion2p());
+console.log(per2.generaid(per2.nombrej,per2.apellido,per2.gamerid));
+}
+}
+
+
+  
+  let reg3 = new Jugador("Sandra","Velazquez",5);
+  let reg1 = new Jugador("Arturo","Ibarra","DearGood");
+  let reg2 = new Jugador(per1.nombrej + per1.apellido + "KillBill");
+
+  console.log("El Nombre es " + reg1.nombrej + "    El Apellido es  " + reg1.apellido + "   El GamerID es " + reg1.gamerid );
+  
+  console.log("los datos 1er Jugador son " + reg2.nombrej );
+    
+  console.log(reg2.presentacionj());
+  
+console.log(reg3.generaid(reg3.nombrej,reg3.apellido,reg3.gamerid));
+
+
+
+
+
+
+    </script>
+
+</body>
+
+
+</html>

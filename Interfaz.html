@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <meta charset="utf-8">
+ <title>No te Cases</title>
+ <!--<script type="text/javascript" src="js/Controller.js"></script>-->
+</head>
+
+<body>
+	<h1>¿Que Comience el Juego?</h1>
+	
+	<div id="f1">
+	<form id="1" action="javascript:regper();">	
+		
+		<label>¿Registro para una Persona?</label>
+		<p></p><label>Nombre</label>
+			<input id="nombrej" type="text">
+		<p></p><label>Apellido</label>
+			<input id="apellido" type="text" >
+			
+			<button type="submit">Procesa</button>
+			
+		</fieldset>	
+    </form>
+</div>
+
+
+<script type="text/javascript">
+			
+
+		// Asociacion a Uno
+class Persona {
+    constructor(nombrej,apellido) {
+      this.nombrej = nombrej;
+      this.apellido = apellido;
+      this.personas = [nombrej,apellido]; //Asociacion a Muchos
+
+    }
+
+    
+    presentacion1p() {  
+        console.log(`Hola. Soy ${this.nombrej}. Y mi Apellido es ${this.apellido}`);
+      }
+      presentacion2p() {
+        console.log(`Hola. Las Personas Registrados son :  ${this.personas}.`);
+      }
+      /** @abstract */
+    error() { throw new Error("abstract"); }
+  }     
+
+
+  function regper(){
+//let inter = nombrej.value;
+let ins1 = new Persona(nombrej.value,apellido.value);
+console.log(ins1.nombrej,ins1.apellido);
+console.log(ins1.presentacion1p());
+
+}
+
+
+	</script>
+
+    
+<button><a href="Interfaz0.html">Ir A Segundo formulario</a> </button>
+
+	
+
+</body>
+
+
+</html>
